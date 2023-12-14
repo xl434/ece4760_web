@@ -1,3 +1,9 @@
+---
+permalink: /conclusion/
+sitemap: true
+title: Conclusion
+---
+
 ## Results of the design
 <center><img src="images/image11.jpg"></center>
 <center><img src="images/image22.jpg"></center>
