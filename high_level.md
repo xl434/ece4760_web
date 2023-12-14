@@ -19,13 +19,13 @@ In an ideal op amp, we assume Vp = Vn and Ip=In =0 in a linear region. Since Vn=
   <img src="{{ '/images/image17.png' | absolute_url }}" alt="">
 </figure> 
 
-Thus,  Vout=R1+R2R1*Vin=(1+R2R1)Vin. This equation can be rearranged to obtain the gain (A) of the circuit: A(1+R2R1). This background is essential for us to incorporate amplifier circuits for instrumental signal in our loop station design.
+Thus,  Vout=((R1+R2)/R1)Vin=(1+R2/R1)Vin. This equation can be rearranged to obtain the gain (A) of the circuit: A=(1+R2/R1). This background is essential for us to incorporate amplifier circuits for instrumental signal in our loop station design.
 <figure style="width: 500px" class="align-center">
   <img src="{{ '/images/image7.png' | absolute_url }}" alt="">
 </figure> 
 
 #### Low pass filter
-Low pass filter is a circuit that allows low-frequency signals to pass through while blocking higher frequency signals. Instrumental signals, especially from a guitar or other electronic instruments, may contain high-frequency noises. A low pass filter helps to eliminate higher frequencies to form a cleaner audio signal. It can also prevent aliasing in digital processing. Aliasing happens when high-frequency components in the input signal exceed half of the digital samplin rate, in our case 8kHz, which could lead to distortion or unwanted sound effects. The diagram below shows a capacitive low-pass filter. The cutoff frequency of the circuit is calculated by f=1/(2πRC). 
+Low low-pass filter is a circuit that allows low-frequency signals to pass through while blocking higher-frequency signals. Instrumental signals, especially from a guitar or other electronic instruments, may contain high-frequency noises. A low pass filter helps to eliminate higher frequencies to form a cleaner audio signal. It can also prevent aliasing in digital processing. Aliasing happens when high-frequency components in the input signal exceed half of the digital sampling rate, in our case 8kHz, which could lead to distortion or unwanted sound effects. The diagram below shows a capacitive low-pass filter. The cutoff frequency of the circuit is calculated by f=1/(2πRC). 
 <figure style="width: 500px" class="align-center">
   <img src="{{ '/images/image23.png' | absolute_url }}" alt="">
 </figure> 
@@ -37,15 +37,15 @@ A high-pass filter is a circuit that passes signals with high frequencies while 
 </figure> 
 
 #### Nyquist–Shannon sampling theorem
-The theorem suggests that a continuous signal can be completely represented in its samples and fully reconstructed from those samples if the sampling frequency is greater than twice the highest frequency of the signal. The recording aspect of the loop station is a sampling process of converting continuous-time signal into discrete-time signal by taking measurements of the signal at fixed time intervals. 
-The ** Nyquist rate ** is defined as twice the maximum frequency present in the signal. For example, the highest effective frequency of a electrical guitar signal is 5 kHz, the Nyquist rate should by 10 kHz to ensure that the original signal can be accurately represented by its samples.
-** Aliasing ** happens if a signal is sampled below its Nyquist rate. It is the phenomenon when different signals become indistinguishable during sampling processes. High frequency components of the signal can be reflected into lower frequency range, causing distortion of the sample.
+The theorem suggests that a continuous signal can be completely represented in its samples and fully reconstructed from those samples if the sampling frequency is greater than twice the highest frequency of the signal. The recording aspect of the loop station is a sampling process of converting a continuous-time signal into a discrete-time signal by taking measurements of the signal at fixed time intervals. 
+The ** Nyquist rate ** is defined as twice the maximum frequency present in the signal. For example, the highest effective frequency of an electrical guitar signal is 5 kHz, the Nyquist rate should be 10 kHz to ensure that the original signal can be accurately represented by its samples.
+** Aliasing ** happens if a signal is sampled below its Nyquist rate. It is the phenomenon when different signals become indistinguishable during sampling processes. High-frequency components of the signal can be reflected into a lower frequency range, causing distortion of the sample.
 
 #### Superposition of waves
-In order to implement looper's basic function of adding different tracks of music together, we utilized principle of superposition by summing up the individual track value. To prevent from value overflow, we first attenuated the amplitude of each track by 50% and then summed them up. 
+In order to implement looper's basic function of adding different tracks of music together, we utilized the principle of superposition by summing up the individual track value. To prevent from value overflow, we first attenuated the amplitude of each track by 50% and then summed them up. 
 
 ### logical structure
-We don’t have specific FSM when we implement, instead, we used state variables to switch between different stages: first time recording, recording, playing, pause, clear.
+We didn’t have a specific FSM when we implemented, instead, we used state variables to switch between different stages: first-time recording, recording, playing, pause, clear.
 
 #### Recording
 <figure style="width: 500px" class="align-center">
@@ -63,7 +63,7 @@ For the state change between Recording and Not Recording, there are three method
 </figure> 
 
 For the state change between Recording and Not Recording, there are two methods:
-Pressing the playing button when it’s not first time recording and not already playing will be able to play back the previous recordings. 
+Pressing the playing button when it’s not the first time recording and not already playing will allow you to play back the previous recordings. 
 If pressing it when already playing, then it will pause.
 
 #### First Recording 
@@ -72,13 +72,13 @@ If pressing it when already playing, then it will pause.
 </figure> 
 
 For the state change between First Recording and Not Recording, there is one method: 
-Pressing the recording button when it’s at first recording will change it to recording
+Pressing the recording button when it’s first recording will change it to recording
 
 
 ### hardware/software trade-offs
 Trade-off in our design includes 
 * ADC noise
-* High-frequency noise because we didn’t have low pass filter because we didn’t suspect that high-frequency noise is predominant when sampling.
+* High-frequency noise because we didn’t have a low pass filter because we didn’t suspect that high-frequency noise is predominant when sampling.
 * Memory restricting the length of each track
 * Noise due to low sampling rate of 8k when guitar can produce 5k (Nyquist-Shar)
 Discuss existing patents, copyrights, and trademarks which are relevant to your project.
