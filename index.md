@@ -1,5 +1,5 @@
 # Pi Looper
-<center><img src="/images/pilooper_logo.jpg" width="100" height="100"></center>
+
 ## **Project Introduction**
 
 ### One sentence "sound bite" that describes your project.
