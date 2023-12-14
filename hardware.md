@@ -1,3 +1,9 @@
+---
+permalink: /hardware/
+sitemap: true
+title: Hardware
+---
+
 ## **Program/hardware design**
 ### hardware 
 #### Schematics and wiring
