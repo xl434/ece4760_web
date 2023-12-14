@@ -1,7 +1,7 @@
 ---
 permalink: /high_level/
 sitemap: true
-title: High level design
+title: High Level Design
 ---
 
 ## **High level design**
