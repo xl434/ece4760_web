@@ -1,7 +1,7 @@
 ## Results of the design
 <center><img src="images/image11.png"></center>
-<center><img src="images/image22.png"></center>
-<center><img src="images/image24.png"></center>
+<center><img src="images/image22.jpg"></center>
+<center><img src="images/image24.jpg"></center>
 
 ### Any and all test data, scope traces, waveforms, etc
 
