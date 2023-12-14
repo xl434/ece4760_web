@@ -88,6 +88,7 @@ We learned abut FRAM and our memory restriction from Bruce. Pico’s RAM is arou
 For writing and reading out of FRAM, we used fOpen(char* fileName) to create a file in FRAM, then fWrite(open_block_index, input_pointer, num_bytes) to write the data in the buffer to the file, and fClose(open_block_index) to close the file. For reading the file out of FRAM when the user want to play the saved audio, fRead(open_block_index, output_pointer, num_bytes) is used.
 <center><img src="images/image13.png"></center>
 
+
 ### Software program details
 #### General
 **Consideration in memory**: The current track is stored in a char buffer of size 80000. Since the sampling and output frequency are both 8k Hz, this buffer size corresponds to 10 seconds. That is, our looper is capable of recording and layering on top of a track of maximum length 10 seconds. This buffer is stored in Pico’s RAM, which has a capacity of 256 kB. Since the buffer is 800000 bytes in size, corresponding to 80kb, it occupies a rather significant amount of RAM, considering that there are a number of other variables we monitor for. We therefore introduce external memory FRAM to implement functionalities in saving recorded tracks. 
