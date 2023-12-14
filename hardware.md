@@ -7,9 +7,15 @@ title: Hardware
 ## **Program/hardware design**
 ### hardware 
 #### Schematics and wiring
-<center><img src="images/image15.png"></center>
+<figure style="width: 500px" class="align-center">
+  <img src="{{ '/images/image15.png' | absolute_url }}" alt="">
+</figure> 
+
 #### Amplifier circuit
-<center><img src="images/image14.png"></center>
+<figure style="width: 500px" class="align-center">
+  <img src="{{ '/images/image14.png' | absolute_url }}" alt="">
+</figure> 
+
 This circuit takes in the guitar input and passes it through a 0.1u decoupling capacitor. This capacitor will block any DC component of the signal and only allow AC signal to pass through, helping us to eliminate DC noise. Then R1 and R2 form a voltage divider to bias the op-amp and increase the signal’s value. These three components also form a high pass filter which has the following cut-off frequency:
 fcutoff=12RC=12**33.33k*0.1u=47.772Hz
 We know that common guitars usually produce effective sounds frequency from 75 to 5k Hz, so this cutoff frequency helps as eliminate low frequencies noise. 
@@ -25,4 +31,6 @@ We used the MCP4822 DAC with two independent DACs, each with a 12-bit resolution
 #### FRAM (SPI)
 We learned abut FRAM and our memory restriction from Bruce. Pico’s RAM is around 260 KB with a 2MB flash program memory. This is enough for digital synthesized sounds, but not for audio recordings’ saving and replaying. Therefore, we look into using the nonvolatile FRAM that’s byte-addressable. Though it’s smaller than SD card, it’s enough for us to store small audio samples, enabling fast read/write of data. According to Bruce, we used MB85RS4MT which is a “half-megabyte memory which can read/write at 5 MB/sec over SPI using a 40 MHz SPI clock.” 
 For writing and reading out of FRAM, we used fOpen(char* fileName) to create a file in FRAM, then fWrite(open_block_index, input_pointer, num_bytes) to write the data in the buffer to the file, and fClose(open_block_index) to close the file. For reading the file out of FRAM when the user want to play the saved audio, fRead(open_block_index, output_pointer, num_bytes) is used.
-<center><img src="images/image13.png"></center>
+<figure style="width: 500px" class="align-center">
+  <img src="{{ '/images/image14.png' | absolute_url }}" alt="">
+</figure> 
