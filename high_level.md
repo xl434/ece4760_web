@@ -10,7 +10,9 @@ title: High Level Design
 ### Background math
 #### Non-inverting Amplifier Circuit
 A non-inverting amplifier circuit is an operational amplifier (op-amp) configuration where the input signal is connected to the non-inverting terminal (+) and the feedback is applied to the inverting terminal (-). The output is taken from the opamp’s output terminal. The key characteristic of a non-inverting amplifier is that it provides a voltage gain, which means the output voltage is amplified in relation to the input voltage. 
-<center><img src="{{ '/images/image16.jpg' | absolute_url }}" alt=""></center>
+<figure style="width: 500px" class="align-center">
+  <img src="{{ '/images/image16.jpg' | absolute_url }}" alt="">
+</figure> 
 
 In an ideal op amp, we assume Vp = Vn and Ip=In =0 in a linear region. Since Vn=Vin, we can get  Vp=Vn=Vin. This simplifies the amplifier circuit to a voltage divider circuit:
 <center><img src="images/image17.png"></center>
