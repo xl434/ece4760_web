@@ -1,80 +1,55 @@
----
-permalink: /lab4/
-sitemap: false
-title: Lab 4
----
-# RF Communication, Navigation, and Finalizing Robot
-#### Description
-In the final lab, we worked on implementing RF communication, DFS navigation, PID control, and combining all codes we did so far. Our goal is to program the robot so it navigates the maze and completes various during the final demo. Fig.1 shows the overall dimensions of the maze. In the beginning of the demo, the robot will be positioned to the lower-right corner of the maze. It will remain at the starting position of the maze until it detects a 440 Hz frequency. In case the robot fails to identify the frequency, an override button should be implemented to indicates the beginning of navigation. The robot will search the maze using DFS algorithm and continously look for treausures, which are IR LEDs at different frequencies. Every time when a treasure is found, robot will measure the treasure's frequency and send the frequency to base station, where the frequency value will be desplayed. After total of two treasures are found, robot will imediately stop navigation and then blink its onboard LED.
+## Results of the design
+<center><img src="images/image11.png"></center>
+<center><img src="images/image22.png"></center>
+<center><img src="images/image24.png"></center>
 
-<figure style="width: 500px" class="align-center">
-  <img src="{{ '/images/lab4/maze.png' | absolute_url }}" alt="">
-  <figcaption>Fig.1. Maze dimensions.</figcaption>
-</figure> 
+### Any and all test data, scope traces, waveforms, etc
 
-#### Part 1: RF Transcievers
-With RF transceivers connected into both base station's and robot's breadboard, we tested the communication with example code provided. To build the communication between two, the pipe numbers for base station and robot should be matched. We calculated the pipe numbers by following: pipe numbers = 𝟐∙(3∙D+N)+X (where D is the day of the week on which your scheduled lab takes place; N is our team number; X is 0 for the transmitter and 1 for the receiver). In this way, we came up with unique pipe numbers and avoided signal interruptions from other teams. After the communication worked, we adopted code provided and developed an function for robot that continously sends measured frequency to the base station until the transmission is successful or time outs.
+* Signal pre and post op-amp
+* Signal post op-amp and from DAC
+<center><img src="images/image20.jpg"></center>
 
-<div class="responsive-embed responsive-embed-21by9" stype="width: 500px">
-  <iframe class="responsive-embed-item" src="https://www.youtube.com/embed/cSgxkioj7cQ" ></iframe>
-</div>
+We scoped signal from the guitar (ch2) and fram dac (ch1). The guitar signal has a peak to peak range around 200 mV, whereas the signal from dac is amplified to a peak to peak of 600mV. The guitar signal is amplified successfully within the voltage range 0 - 3.3V. The DAC output seems to exhibit mor noise, which could be due to the digital sampling and processing or noise introduced by DAC. The waveform shapes suggest that the fundamental frequencies are being preserved. 
 
-#### Part 2: Non-Blocking Coding
-We went through all code that we programmed and replaced blocking statement delay() with non-blocking statements like delayMicroseconds() and milis(). You can see from the final demo video that the motion of robot is very smooth and no obvious pauses happened when navigating the maze.
+### speed of execution (hesitation, flicker, interactiveness, concurrency)
 
-#### Part 3: FFT & Override Button
-By using the same method of performing FFT and obtaining spectrum in lab 3, we tested and compared the spectrum when the robot react to 300, 400, 440, 470, 500, and 500 Hz frequencies. We observed that at frequency 440, a peak would occur between bins 45 to 50. Every time when 257 sampled values are collected, the nano will perform FFT and check the output value around bin 47. If there is no peak at desired bins, ADC will be reset and TCA overflow interrupt mode will be re-enabled. The process will repeat until the robot detects the 440 Hz frequency. After modifying the FFT code from lab 3, we tested using example audio that includes a series of notes at different frequencies. We ensured that navigation start would start only when the 440 Hz note appeared.
+* **Hesitation & Flicker**: our looper is able to achieve no delay when looping tracks. Multiple tracks are ableto be aligned correctly with no perceptible time discrepancies. This allows musician to maintain musical integrity and synchronicity of the composition. 
+* **Concurrency**: our circuit design allows concurrent connection of the amplified guitar signal output and DAC output to the left and right stereo channels separately. This enables the simultaneous output of current guitar sound and looper playback sound. Musicians are able to receive immediate feedback as they record, allowing them to access how the new layer integrates with existing loops. This concurrency feature is crucial for making real-time adjustments to achieve the desired music composition.
+* **Interactiveness**: the design choice of three buttons - record, play, and clean - provides straightforward and essential control for the loop station, making sure its easy to use and minimizing confusion. Traditional loop stations usually have a two-button design that integrates clean and record functions using time delay (short press for record and long press for clean). Compared to two-button design, three distinct buttons provide clear and intuitive controls for different functions. It’s easier to interact with since musicians can easily identify and understand the purpose of each button without ambiguity. However, one future improvement of our system is using footswitches or foot pedals rather than regular push buttons. Footswitches allow musicians to operate the loop station hands-free and provide greater freedom for playing instruments or manipulating other controls. It also allows musicians to trigger functions without any delay. 
 
-The robot needs an override button to signify robot start navigating if the robot fails to identify the specific frequency of the sound. We integrated override button code with FFT, so when navigation would start either when is440 flat is triggered or override button is pushed.
+### accuracy (numeric, music frequencies, video signal timing, etc)
+* Numeric: To ensure not too much noise are included in our computation, we right shift ADC and DAC to eliminate the ineffective lower bits. We also try to preserve all the large numbers without overflowing and only scale down them if necessary (when it has reached the hardware’s limitation).
+* Music Frequencies: For music frequency, we sampled at 8k Hz which is slightly lower than what we should sampled at according to Nyquist–Shannon sampling theorem. Nyquist–Shannon theorem determined the sampling frequency by multiplying the max frequency we want to sample by 2 to ensure the sounds are consistent and clear. We didn’t do so because Bruce suggested that we go with 8k Hz because we are working on a breadboard and can have pin capacitance.
+* 
+### how you enforced safety in the design.
+* Make sure not to feed voltage >3.3V into GPIO
+To enforce this, we always scope anything going into the GPIOs, and also we protect them with current limiting resistors. For potential reversed voltage, we also used diode to cap it at 0V.
+ 
+### Usability by you and other people
+* From functionality point of view, Pi-Looper definitely performs its intended tasks effectively. However, there’re still some aspects of systems need to be improve for a better usability. We build all our circuit on the breadboard, but to have a more compact design, our circuit could be improved by using PCB. A PCB reduces the chance of loose connections and wiring errors that can occur with hand wired circuit. Additionally, it would be better if we have a custom 3D-printed case to protect circuit components from physical or environmental damage. As for the serial communication we used to save and retrive tracks in FRAM, a graphic user interface is necessary for people who are not familiar with terminal commands. 
 
-#### Part 4: Navigation
-We implemented DFS so that the robot can navigate intelligently and covers every single block of the maze. I used a third party stack library so that it's easier to push and pop a value from it. Also, this library make it simplier to search through the list and delete an element from any location and push that element to the front. Although DFS works theoretically, when we tested it on the robot, we found out that there are so many noises that could interrupt normal flow of the DFS. For instance, we have a function called moveForwardOneBlock() that moves the robot in a fixed distance to the middle of the block in front of the robot. However, when we apply PID to correct robot's path, the moveForwardOneBlock() may not move the robot to the location we expected due to the wave correction. 
 
-The video below shows how noises could amplify errors of navigation. The robot at begining is going very straight in the middle of walls, but suddently PID control makes the robot a little off angle. When there is not wall on the right that could be used as PID input, the robot performs moveForwardOneBlock() and moves further way from its ideal path. The error accumulates and robot losts its way very soon and eventually his the wall.
+## Conclusions
 
-<div class="responsive-embed responsive-embed-21by9" stype="width: 500px">
-  <iframe class="responsive-embed-item" src="https://www.youtube.com/embed/ErcQTAEFHwU" ></iframe>
-</div>
+### Analyse your design in terms of how the results met your expectations. What might you do differently next time?
+Our design in general met our expectations. The loop station we designed allows musicians to record, paly, layer, and save instrumental tracks. It supports a wide range of instruments such as guitar, bass, or electric drums. It can also layer multiple tracks, and there is no specific limit on the number of tracks that can be layered. Musicians can play back the recorded tracks in real-time and even when the system is rebooted after powering off. However, an issue with level of noise in the recordings still exist. We tried a couple of methods that indeed improved the noise problem but we didn’t have enough time to address this issue comprehensively. There are some considerations and adjustments we might do differently next time: 1. Conduct thorough analysis to identify specific sources and frequencies of noises. 2. Explore advanced amplifier circuit designs or filtering techniques. 3. Carefully select and test each circuit component befor we put everything together. 4. Document each modification made and the reason behind to address certain issues as well as its impact. 
 
-To solve this problem, we first raised minimum servo speed that can be ajusted by PID control. This could reduce changes in angle due to PID control and lead to a much smooth motion. Also, I improved moveForwardOneBlock() so that it uses US sensor measurements to correct robot's location. For example, the function will also make sure the robot to it's front wall is at a fixed distance everytime when it is at edge blocks or deadend. Another thing we did is to reduce servo's speed. When we tested robot turning at a high speed, the turing angles are slightly different everytime (can see by eyes). Whereas, at a lower speed robot's turning are more stable and accurate.
+### How did your design conform to the applicable standards?
 
-#### Part 5: PID Control
-PID control might be the part that took us the longest time to test and ajust. We used right US sensor as input and a setpoint value of 15. When right US sensor measures a distance of 15, PID will generate an output of 0, which indicates that robot is in the middle of the walls and therefore no two servos should rotate at normal speeds. When the error (=setpoint-input) is positive, the robot is to close to the right wall, so the left servo needs to slow down with a ratio depending on PID output. This will make the robot move leff and get further away from the right way. when the error is negative, the right servo will slow down and robot will move closer to the right wall.
+#### Intellectual property considerations.
+1. Did you reuse code or someone else's design? Did you use any of Altera's IP? Used Bruce’s code on FRAM and reused some of 4760’s lab code. 
+2. Did you use code in the public domain? If 4760 counts, then yes
+3. Are you reverse-engineering a design? How did you deal with patent/trademark issues? 
+4. We were inspired by the commercial looper station’s functionality and we built it step by step without referencing their design which isn’t published as well. 
+5. Did you have to sign non-disclosure to get a sample part? No
+6. Are there patent opportunites for your project? No, we used widely used concepts and designs
 
-We thought about automatically switching input sensors: when the robot is at the middle of two wall, it will use the difference of left and right US sensor data as input with a setpoint of 0; when only one side has wall, only one sensor will be used as input with a setpoint of 15. We coded the robot to do that, some obvious wave motion are caused by switching PID input. Since we don't have enought time to test and improve this plan, we decided to use our origional PID, which is only using right US sensor and disabling PID when no wall on the right. 
+## Appendix A: permissions
+The group approves this report for inclusion on the course website.
+The group approves the video for inclusion on the course YouTube channel.
 
-With coefficients k-p, k-i, k-d that we tested over hundreds of time, we are so impressed that our PID eventually performed really well and provided a nice position adjustment for the robot.
-
-<div class="responsive-embed responsive-embed-21by9" stype="width: 500px">
-  <iframe class="responsive-embed-item" src="https://www.youtube.com/embed/jU8PCq7maXw" ></iframe>
-</div>
-
-#### Part 6: Freqeuncy Measurement & Display
-The robot should regulary look for treasure when it navigates around the maze. We used the new code provided on canvas and modified it so it can cycle through three phototransistors and detects frequency in three different directions. Then, I coded the frequency measurement procedure: when a frequency is detected, the robot will immediately stop if no treasure has been found (foundTreasure = 0) or if the frequency detected is not close to the first frequency measured (making sure is a different treasure). Otherwise, the robot will continue exploring. When robot meets the stop condition, it will stay at its current position and collects 20 frequency samples. If the robot couldn't collect 20 samples before time out, it will resume its navigation. If it successfully collects 20 samples, the arrary that stores all the samples will go through sorting and mod to find the most frequent element. The output frequency will be sent to base station and displayed.
-
-<div class="responsive-embed responsive-embed-21by9" stype="width: 500px">
-  <iframe class="responsive-embed-item" src="https://www.youtube.com/embed/1bsD_23xe-M" ></iframe>
-</div>
-
-#### Final Demo
-Nights and nights of testing and modifying eventually paied off! Our robot navigated the maze with very mimimum collisions to walls and found both two treasures with correct frequency measured during final demo. Although during first time demonstration the base station was not displaying any frequency, we figured out the issue was due to a broken transceiver. The transceiver worked properly the night before demo day, but accident still happened! After we changed a new tranciever, the base station worked and displayed correct frequency. Check the video below how our robot navigates the maze!
-
-<div class="responsive-embed responsive-embed-21by9" stype="width: 500px">
-  <iframe class="responsive-embed-item" src="https://www.youtube.com/embed/49Sj6QCjLVE" ></iframe>
-</div>
-
-## Gallery
-<figure style="width: 500px" class="align-center">
-  <img src="{{ '/images/lab4/robot.png' | absolute_url }}" alt="">
-  <figcaption>Fig.2. Final robot construction.</figcaption>
-</figure> 
-
-<figure style="width: 500px" class="align-center">
-  <img src="{{ '/images/lab4/team.png' | absolute_url }}" alt="">
-  <figcaption>Fig.3. Us holding the robot and base station.</figcaption>
-</figure> 
-
-<figure style="width: 500px" class="align-center">
-  <img src="{{ '/images/lab4/me.jpg' | absolute_url }}" alt="">
-  <figcaption>Fig.4. 4am at Duffield.</figcaption>
-</figure> 
+## Additional appendices
+References we used:
+https://spiceman.net/non-inverting-amplifier-circuit/ 
+https://en.wikipedia.org/wiki/Low-pass_filter 
+https://people.ece.cornell.edu/land/courses/ece4760/RP2040/C_SDK_memory/index_memory.html 
