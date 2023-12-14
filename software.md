@@ -12,7 +12,9 @@ title: Software Design
 **Considerations in state transitions**: There are four state variables: recording, playing, and first_record, and blink red. These states are changed by both button presses and logic within the code. Since button presses are not the only source of change in state, and one button press does not necessarily corresponds to only one change, tthere are a bit more logic to consider when buttons are pressed. For example, we do not want to record when the track is not playing. Therefore, on transition of recording state from low to high, if playing is low, we would force it to high. Another example is when we press record for the frist time, the recording state should not become high immediately, since we need the red led to blink first. Therefore, recording would only be set to high after blink_red becomes low. 
 
 **Valid combination of states** (in typical sequence)
-<center><img src="images/image0.png"></center>
+<figure style="width: 500px" class="align-center">
+  <img src="{{ '/images/image0.png' | absolute_url }}" alt="">
+</figure> 
 
 ### Threads
 
