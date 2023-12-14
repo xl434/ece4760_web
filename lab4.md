@@ -1,5 +1,5 @@
 ## Results of the design
-<center><img src="images/image11.png"></center>
+<center><img src="images/image11.jpg"></center>
 <center><img src="images/image22.jpg"></center>
 <center><img src="images/image24.png"></center>
 
