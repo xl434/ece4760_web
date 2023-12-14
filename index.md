@@ -37,3 +37,33 @@ In order to implement looper's basic function of adding different tracks of musi
 We don’t have specific FSM when we implement, instead, we used state variables to switch between different stages: first time recording, recording, playing, pause, clear.
 #### Recording
 <center><img src="images/image19.png"></center>
+For the state change between Recording and Not Recording, there are three methods:
+1. Pressing the recording button when the recording is on, doesn’t care about if playing or not.
+2. In recording mode, the recording time limit is up (10 seconds), it will automatically go to not recording and turn on playing. 
+3. Press the playing button when in recording mode, when play is also on, will stop the playing and recording
+
+#### Playing
+<center><img src="images/image12.png"></center>
+For the state change between Recording and Not Recording, there are two methods:
+Pressing the playing button when it’s not first time recording and not already playing will be able to play back the previous recordings. 
+If pressing it when already playing, then it will pause.
+
+#### First Recording 
+<center><img src="images/image10.png"></center>
+For the state change between First Recording and Not Recording, there is one method: 
+Pressing the recording button when it’s at first recording will change it to recording
+
+
+### hardware/software trade-offs
+Trade-off in our design includes 
+* ADC noise
+* High-frequency noise because we didn’t have low pass filter because we didn’t suspect that high-frequency noise is predominant when sampling.
+* Memory restricting the length of each track
+* Noise due to low sampling rate of 8k when guitar can produce 5k (Nyquist-Shar)
+Discuss existing patents, copyrights, and trademarks which are relevant to your project.
+
+
+## **Program/hardware design**
+### hardware 
+#### Schematics and wiring
+<center><img src="images/image15.png"></center>
