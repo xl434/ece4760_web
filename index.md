@@ -136,7 +136,7 @@ Therefore we combined the GPIO callback functions into one and used conditional 
 ### Any and all test data, scope traces, waveforms, etc
 * Signal pre and post op-amp
 * Signal post op-amp and from DAC
-<center><img src="images/image20.png"></center>
+<center><img src="images/image20.jpg"></center>
 We scoped signal from the guitar (ch2) and fram dac (ch1). The guitar signal has a peak to peak range around 200 mV, whereas the signal from dac is amplified to a peak to peak of 600mV. The guitar signal is amplified successfully within the voltage range 0 - 3.3V. The DAC output seems to exhibit mor noise, which could be due to the digital sampling and processing or noise introduced by DAC. The waveform shapes suggest that the fundamental frequencies are being preserved. 
 ### speed of execution (hesitation, flicker, interactiveness, concurrency)
 * **Hesitation & Flicker**: our looper is able to achieve no delay when looping tracks. Multiple tracks are ableto be aligned correctly with no perceptible time discrepancies. This allows musician to maintain musical integrity and synchronicity of the composition. 
