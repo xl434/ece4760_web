@@ -5,9 +5,15 @@ title: Conclusion
 ---
 
 ## Results of the design
-<center><img src="images/image11.jpg"></center>
-<center><img src="images/image22.jpg"></center>
-<center><img src="images/image24.png"></center>
+<figure style="width: 500px" class="align-center">
+  <img src="{{ '/images/image11.jpg' | absolute_url }}" alt="">
+</figure> 
+<figure style="width: 500px" class="align-center">
+  <img src="{{ '/images/image22.jpg' | absolute_url }}" alt="">
+</figure> 
+<figure style="width: 500px" class="align-center">
+  <img src="{{ '/images/image24.jpg' | absolute_url }}" alt="">
+</figure> 
 
 ### Any and all test data, scope traces, waveforms, etc
 
