@@ -25,7 +25,7 @@ Low pass filter is a circuit that allows low-frequency signals to pass through w
 
 #### High pass filter
 A high-pass filter is a circuit that passes signals with high frequencies while attenuating lower-frequency signals. A high-pass filter is very efficient in filtering out low-frequency noises such as electrical hum, interference, or background rumble. The cutoff frequency of the high-pass filter in the diagram below can be calculated as: f=1/(2πRC). 
-<center><img src="images/image21.png"></center>
+<center><img src="images/image21.png" width=300 height=200></center>
 
 #### Nyquist–Shannon sampling theorem
 The theorem suggests that a continuous signal can be completely represented in its samples and fully reconstructed from those samples if the sampling frequency is greater than twice the highest frequency of the signal. The recording aspect of the loop station is a sampling process of converting continuous-time signal into discrete-time signal by taking measurements of the signal at fixed time intervals. 
@@ -87,3 +87,12 @@ We used the MCP4822 DAC with two independent DACs, each with a 12-bit resolution
 We learned abut FRAM and our memory restriction from Bruce. Pico’s RAM is around 260 KB with a 2MB flash program memory. This is enough for digital synthesized sounds, but not for audio recordings’ saving and replaying. Therefore, we look into using the nonvolatile FRAM that’s byte-addressable. Though it’s smaller than SD card, it’s enough for us to store small audio samples, enabling fast read/write of data. According to Bruce, we used MB85RS4MT which is a “half-megabyte memory which can read/write at 5 MB/sec over SPI using a 40 MHz SPI clock.” 
 For writing and reading out of FRAM, we used fOpen(char* fileName) to create a file in FRAM, then fWrite(open_block_index, input_pointer, num_bytes) to write the data in the buffer to the file, and fClose(open_block_index) to close the file. For reading the file out of FRAM when the user want to play the saved audio, fRead(open_block_index, output_pointer, num_bytes) is used.
 <center><img src="images/image13.png"></center>
+
+### Software program details
+#### General
+**Consideration in memory**: The current track is stored in a char buffer of size 80000. Since the sampling and output frequency are both 8k Hz, this buffer size corresponds to 10 seconds. That is, our looper is capable of recording and layering on top of a track of maximum length 10 seconds. This buffer is stored in Pico’s RAM, which has a capacity of 256 kB. Since the buffer is 800000 bytes in size, corresponding to 80kb, it occupies a rather significant amount of RAM, considering that there are a number of other variables we monitor for. We therefore introduce external memory FRAM to implement functionalities in saving recorded tracks. 
+
+**Considerations in state transitions**: There are four state variables: recording, playing, and first_record, and blink red. These states are changed by both button presses and logic within the code. Since button presses are not the only source of change in state, and one button press does not necessarily corresponds to only one change, tthere are a bit more logic to consider when buttons are pressed. For example, we do not want to record when the track is not playing. Therefore, on transition of recording state from low to high, if playing is low, we would force it to high. Another example is when we press record for the frist time, the recording state should not become high immediately, since we need the red led to blink first. Therefore, recording would only be set to high after blink_red becomes low. 
+
+**Valid combination of states** (in typical sequence)
+<center><img src="images/image0.png"></center>
