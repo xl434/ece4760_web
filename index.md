@@ -41,6 +41,7 @@ In order to implement looper's basic function of adding different tracks of musi
 
 ### logical structure
 We don’t have specific FSM when we implement, instead, we used state variables to switch between different stages: first time recording, recording, playing, pause, clear.
+
 #### Recording
 <center><img src="images/image19.png"></center>
 For the state change between Recording and Not Recording, there are three methods:
@@ -135,8 +136,8 @@ Therefore we combined the GPIO callback functions into one and used conditional 
 
 ## Results of the design
 <center><img src="images/image11.png"></center>
-<center><img src="images/image22.png"></center>
-<center><img src="images/image24.png"></center>
+<center><img src="images/image22.jpg"></center>
+<center><img src="images/image24.jpg"></center>
 ### Any and all test data, scope traces, waveforms, etc
 * Signal pre and post op-amp
 * Signal post op-amp and from DAC
