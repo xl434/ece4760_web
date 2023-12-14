@@ -1,4 +1,5 @@
 ### Software program details
+
 #### General
 **Consideration in memory**: The current track is stored in a char buffer of size 80000. Since the sampling and output frequency are both 8k Hz, this buffer size corresponds to 10 seconds. That is, our looper is capable of recording and layering on top of a track of maximum length 10 seconds. This buffer is stored in Pico’s RAM, which has a capacity of 256 kB. Since the buffer is 800000 bytes in size, corresponding to 80kb, it occupies a rather significant amount of RAM, considering that there are a number of other variables we monitor for. We therefore introduce external memory FRAM to implement functionalities in saving recorded tracks. 
 
@@ -6,6 +7,7 @@
 
 **Valid combination of states** (in typical sequence)
 <center><img src="images/image0.png"></center>
+
 #### Threads
 
 ##### LED
@@ -18,6 +20,7 @@ On a save operation, a file is first opened, then the buffer is written into the
 On a play operation, the file is first opened, and data in the file is written into the buffer, and lastly the file is closed. The length is fetched from the array and stored into `track_length` variable. If a track selected for play has not been saved before, the data will not be loaded into the buffer, and there will be a prompt to let the user know. 
 
 #### IRQ handler
+
 ##### Timer interrupt 
 The timer interrupt is set up to be serviced at a frequency of 8k Hz, corresponding to the sampling rate and the rate at which data is sent to audio jack through DAC. 
 If the system is playing, the data in appropriate position will be sent to DAC, in order to be played by the speaker. Note that the data is sent before being modified, in the case that the track is also in recording mode. This is due to the fact that we have one of the two channels of the speaker connected to the amplified guitar sound directly, and the other channel connected to DAC output. 
