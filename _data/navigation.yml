@@ -1,10 +1,10 @@
-- title: Home
+- title: Intro
   url: /
-- title: Lab1
-  url: /lab1/
-- title: Lab2
-  url: /lab2/
-- title: Lab3
-  url: /lab3/
-- title: Lab4
-  url: /lab4/
+- title: High Level
+  url: /high_level/
+- title: Hardware
+  url: /handware/
+- title: Software
+  url: /software/
+- title: Conclusion
+  url: /conclusion/
