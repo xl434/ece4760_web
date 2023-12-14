@@ -1,3 +1,5 @@
+# Pi Looper
+
 ## **Project Introduction**
 
 ### One sentence "sound bite" that describes your project.
